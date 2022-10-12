@@ -40,7 +40,7 @@ const Home = ({ setToken }) => {
     );
     const response = await data.json();
     setToken(response);
-    setUserToken(response.toString());
+    setUserToken(response);
   };
 
   const enterGame = () => {
