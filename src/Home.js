@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Home = ({ setToken }) => {
   // State
   const [walletAddress, setWalletAddress] = useState(null);
+  const [userToken, setUserToken] = useState(null);
 
   const navigate = useNavigate();
 
@@ -39,6 +40,11 @@ const Home = ({ setToken }) => {
     );
     const response = await data.json();
     setToken(response);
+    setUserToken(response.toString());
+  };
+
+  const enterGame = () => {
+    navigate("/play");
   };
 
   const connectWallet = async () => {
@@ -49,7 +55,7 @@ const Home = ({ setToken }) => {
       console.log("Connected with Public Key:", response.publicKey.toString());
       setWalletAddress(response.publicKey.toString());
       await fetchUser();
-      navigate("/play");
+      //navigate("/play");
     }
   };
 
@@ -73,7 +79,26 @@ const Home = ({ setToken }) => {
   return (
     <div className="container flex flex-col justify-center shadow-xl shadow-cyan-500/50 mx-auto mt-40 items-center bg-gray-200 p-20 max-w-4xl rounded-2xl">
       <h1 className="text-3xl mb-11">Login System Test</h1>
-      {renderNotConnectedContainer()}
+      {!userToken && renderNotConnectedContainer()}
+      {userToken && (
+        <>
+          <button
+            className="bg-red-500 text-3xl text-white border-4 border-yellow-500 rounded-md p-4 transition duration-100 hover:-translate-y-6 hover:bg-blue-400 hover:scale-110"
+            onClick={enterGame}
+          >
+            Enter Game
+          </button>
+          <div class="flex flex-col justify-center items-center mt-10">
+            <button
+              class="bg-yellow-300 text-3xl text-white border-4 border-yellow-500 rounded-md p-4 transition duration-100 hover:-translate-y-6 hover:bg-blue-400 hover:scale-110"
+              onClick={fetchUser}
+            >
+              Generate Token Again
+            </button>
+            <p className="text-2xl mt-10">{userToken}</p>
+          </div>
+        </>
+      )}
     </div>
   );
 };
